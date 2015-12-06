@@ -14,7 +14,7 @@ another paragraph
 Output:
 ```html
 <p>text with <img src="img.png" alt=""></p>
-<p><figure><img src="fig.png" alt=""></figure></p>
+<figure><img src="fig.png" alt=""></figure>
 <p>another paragraph</p>
 ```
 
@@ -32,7 +32,7 @@ $ npm install --save markdown-it-implicit-figures
 var md = require('markdown-it')();
 var implicitFigures = require('markdown-it-implicit-figures');
 
-md.use(implicitFigures);
+md.use(implicitFigures, { dataType: true });
 
 var src = 'text with ![](img.png)\n\n![](fig.png)\n\nanother paragraph';
 var res = md.render(src);
@@ -40,6 +40,11 @@ var res = md.render(src);
 console.log(res);
 ```
 
+## Options
+
+Enabling the `dataType` boolean flag in the options will generate figure tags that
+also declare the data-type being wrapped, e.g.: `<figure data-type="image">`. 
+This can be useful for applying special styling.
 
 ## License
 
