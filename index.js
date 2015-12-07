@@ -4,7 +4,7 @@ var figure = function (options) {
 
   var dataType = (typeof options.dataType !== 'undefined') ? options.dataType : false;
 
-  return function implicit_figure (state, startLine, endLine, silent) {
+  return function implicit_figure (state, startLine) {
     var content, terminate, i, l, token,
         prevLine = startLine - 1,
         nextLine = startLine + 1,
