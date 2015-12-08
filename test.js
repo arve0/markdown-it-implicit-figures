@@ -11,7 +11,16 @@ describe('markdown-it-implicit-figures', function() {
 
   it('should add <figure> when image is by itself in a paragraph', function () {
     var src = 'text with ![](img.png)\n\n![](fig.png)\n\nanother paragraph';
-    var expected = '<p>text with <img src="img.png" alt=""></p>\n<p><figure><img src="fig.png" alt=""></figure></p>\n<p>another paragraph</p>\n';
+    var expected = '<p>text with <img src="img.png" alt=""></p>\n<figure><img src="fig.png" alt=""></figure>\n<p>another paragraph</p>\n';
+    var res = md.render(src);
+    assert.equal(res, expected);
+  });
+
+
+  it('should add data-type=image to figures when opts.dataType is set', function () {
+    md = Md().use(implicitFigures, { dataType: true });
+    var src = 'text with ![](img.png)\n\n![](fig.png)\n\nanother paragraph';
+    var expected = '<p>text with <img src="img.png" alt=""></p>\n<figure data-type="image"><img src="fig.png" alt=""></figure>\n<p>another paragraph</p>\n';
     var res = md.render(src);
     assert.equal(res, expected);
   });

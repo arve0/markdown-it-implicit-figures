@@ -1,18 +1,38 @@
 'use strict';
 
-module.exports = function implicitFiguresPlugin(md) {
+module.exports = function implicitFiguresPlugin(md, options) {
+  options = options || {};
 
-  var defaultRender = md.renderer.rules.image;
+  function implicitFigures(state) {
+    // do not process first and last token
+    for (var i=1, l=state.tokens.length; i < (l - 1); ++i) {
+      var token = state.tokens[i];
 
-  md.renderer.rules.image = function (tokens, idx, options, env, self) {
-    var token = tokens[idx];
-    var img = defaultRender(tokens, idx, options, env, self);
+      // inline token
+      if (token.type !== 'inline') { continue; }
+      // inline token have 1 child
+      if (!token.children || token.children.length !== 1) { continue; }
+      // child is image
+      if (token.children[0].type !== 'image') { continue; }
+      // prev token is paragraph open
+      if (i !== 0 && state.tokens[i - 1].type !== 'paragraph_open') { continue; }
+      // next token is paragraph close
+      if (i !== (l - 1) && state.tokens[i + 1].type !== 'paragraph_close') { continue; }
 
-    if (tokens.length === 1) {
-      // image is alone
-      img = '<figure>'+ img +'</figure>';
+      // We have inline token containing an image only.
+      // Previous token is paragraph open.
+      // Next token is paragraph close.
+      // Lets replace the paragraph tokens with figure tokens.
+      state.tokens[i - 1].type = 'figure_open';
+      state.tokens[i - 1].tag = 'figure';
+      state.tokens[i + 1].type = 'figure_close';
+      state.tokens[i + 1].tag = 'figure';
+
+      if (options.dataType == true) {
+        state.tokens[i - 1].attrPush(['data-type', 'image']);
+      }
     }
-
-    return img;
   }
+
+  md.core.ruler.push('implicit_figures', implicitFigures);
 };
