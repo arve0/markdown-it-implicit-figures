@@ -1,4 +1,4 @@
-'use strict';
+"use strict";
 
 var IMAGE_RE = /(?:\s|^)(!\[.*?\]\((.+?)\))(?:\s|$)/;
 
