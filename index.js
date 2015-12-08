@@ -31,6 +31,21 @@ module.exports = function implicitFiguresPlugin(md, options) {
       if (options.dataType == true) {
         state.tokens[i - 1].attrPush(['data-type', 'image']);
       }
+
+      if (options.figcaption == true) {
+        var image = token.children[0];
+        if (image.children && image.children.length) {
+          token.children.push(
+            new state.Token('figcaption_open', 'figcaption', 1)
+            );
+          token.children.push(
+            md.utils.assign({}, image.children[0])
+            );
+          token.children.push(
+            new state.Token('figcaption_close', 'figcaption', -1)
+            );
+        }
+      }
     }
   }
 
