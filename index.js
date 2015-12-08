@@ -1,6 +1,7 @@
 'use strict';
 
-module.exports = function implicitFiguresPlugin(md) {
+module.exports = function implicitFiguresPlugin(md, options) {
+  options = options || {};
 
   function implicitFigures(state) {
     // do not process first and last token
@@ -26,6 +27,10 @@ module.exports = function implicitFiguresPlugin(md) {
       state.tokens[i - 1].tag = 'figure';
       state.tokens[i + 1].type = 'figure_close';
       state.tokens[i + 1].tag = 'figure';
+
+      if (options.dataType == true) {
+        state.tokens[i - 1].attrPush(['data-type', 'image']);
+      }
     }
   }
 
