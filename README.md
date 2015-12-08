@@ -14,10 +14,16 @@ another paragraph
 Output:
 ```html
 <p>text with <img src="img.png" alt=""></p>
-<p><figure><img src="fig.png" alt=""></figure></p>
+<figure><img src="fig.png" alt=""></figure>
 <p>another paragraph</p>
 ```
 
+
+## Options
+
+Enabling the `dataType` boolean flag in the options will generate figure tags
+that also declare the data-type being wrapped, e.g.: `<figure data-type="image">`.
+This can be useful for applying special styling for different kind of figures.
 
 ## Install
 
