@@ -1,63 +1,77 @@
 'use strict';
 
-var figure = function (options) {
+var IMAGE_RE = /(?:\s|^)(!\[.*?\]\((.+?)\))(?:\s|$)/;
 
-  var dataType = (typeof options.dataType !== 'undefined') ? options.dataType : false;
+var hasImage = function (str) {
+  return IMAGE_RE.test(str);
+};
 
-  return function implicit_figure (state, startLine, endLine, silent) {
-    var content, terminate, i, l, token,
-        prevLine = startLine - 1,
-        nextLine = startLine + 1,
-        terminatorRules = state.md.block.ruler.getRules('implicit_figure'),
-        endLine = state.lineMax,
-        openTag = dataType ? 'figure data-type="image"' : 'figure';
+var tokenHasOnlyImageChildren = function (token) {
+  return token &&
+    token.type === "inline" &&
+    token.children.length === 1 &&
+    token.children[0].type === "image";
+};
 
-    // jump line-by-line until empty one or EOF
-    for (; nextLine < endLine && !state.isEmpty(nextLine); nextLine++) {
-      // this would be a code block normally, but after paragraph
-      // it's considered a lazy continuation regardless of what's there
-      if (state.sCount[nextLine] - state.blkIndent > 3) { continue; }
+var getTokensToUpdate = function (token, index, tokens) {
 
-      // quirk for blockquotes, this line should already be checked by that rule
-      if (state.sCount[nextLine] < 0) { continue; }
+  var testToken;
 
-      // Some tags can terminate paragraph without empty line.
-      terminate = false;
-      for (i = 0, l = terminatorRules.length; i < l; i++) {
-        if (terminatorRules[i](state, nextLine, endLine, true)) {
-          terminate = true;
-          break;
-        }
-      }
-      if (terminate) { break; }
+  if (token.type === "paragraph_open") {
+    testToken = tokens[index + 1];
+  }
+
+  if (token.type === "paragraph_close") {
+    testToken = tokens[index - 1];
+  }
+
+  return tokenHasOnlyImageChildren(testToken);
+};
+
+var updateTokens = function (tokens, options) {
+
+  var len = tokens.length;
+
+  for (var i = tokens.length - 1; i >= 0; i--) {
+    var token = tokens[i];
+
+    // First update the tag, same for open and close
+    token.tag = "figure";
+
+    // Mark as a new token type
+    token.type = token.type === "paragraph_open" ? "figure_open" : "figure_close";
+
+    if (token.type === "figure_open" && options.dataType) {
+
+      // Apply optional attrs
+      token.attrs = token.attrs || [];
+      token.attrs.push(["data-type", "image"]);
+    }
+  }
+};
+
+var implicitFigures = function (options) {
+
+  return function (state) {
+
+    // Return early if no images anywhere
+    if (!hasImage(state.src)) {
+      return false;
     }
 
-    if (!state.isEmpty(prevLine) || !state.isEmpty(nextLine)) { return false; }
+    // Get paragraph tokens that will need to be updated
+    var tokensToUpdate = state.tokens.filter(getTokensToUpdate);
 
-    content = state.getLines(startLine, nextLine, state.blkIndent, false).trim();
+    if (tokensToUpdate.length) {
 
-    if (content.charCodeAt(0) !== 0x21/* ! */) { return false; }
-    if (content.charCodeAt(1) !== 0x5B/* [ */) { return false; }
-
-    state.line = nextLine;
-
-    token          = state.push('figure_open', openTag, 1);
-    token.map      = [ startLine, state.line ];
-
-    token          = state.push('inline', '', 0);
-    token.content  = content;
-    token.map      = [ startLine, state.line ];
-    token.children = [];
-
-    token          = state.push('figure_close', 'figure', -1);
-
-    return true;
+      // Update any captured tokens
+      updateTokens(tokensToUpdate, options);
+    }
   };
 };
 
 module.exports = function implicitFiguresPlugin(md, options) {
 
   options = options || {};
-
-  md.block.ruler.before('paragraph', 'implicit_figure', figure(options), { alt: ['paragraph'] });
+  md.core.ruler.push('implicit_figure', implicitFigures(options));
 };
