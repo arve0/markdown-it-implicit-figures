@@ -25,4 +25,12 @@ describe('markdown-it-implicit-figures', function() {
     assert.equal(res, expected);
   });
 
+  it('should add convert alt text into a figcaption when opts.figcaption is set', function () {
+    md = Md().use(implicitFigures, { figcaption: true });
+    var src = 'text with ![](img.png)\n\n![This is a caption](fig.png)\n\nanother paragraph';
+    var expected = '<p>text with <img src="img.png" alt=""></p>\n<figure><img src="fig.png" alt="This is a caption"><figcaption>This is a caption</figcaption></figure>\n<p>another paragraph</p>\n';
+    var res = md.render(src);
+    assert.equal(res, expected);
+  });
+
 });
