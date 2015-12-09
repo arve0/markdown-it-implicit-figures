@@ -19,16 +19,16 @@ describe('markdown-it-implicit-figures', function() {
 
   it('should add data-type=image to figures when opts.dataType is set', function () {
     md = Md().use(implicitFigures, { dataType: true });
-    var src = 'text with ![](img.png)\n\n![](fig.png)\n\nanother paragraph';
-    var expected = '<p>text with <img src="img.png" alt=""></p>\n<figure data-type="image"><img src="fig.png" alt=""></figure>\n<p>another paragraph</p>\n';
+    var src = '![](fig.png)\n';
+    var expected = '<figure data-type="image"><img src="fig.png" alt=""></figure>\n';
     var res = md.render(src);
     assert.equal(res, expected);
   });
 
   it('should add convert alt text into a figcaption when opts.figcaption is set', function () {
     md = Md().use(implicitFigures, { figcaption: true });
-    var src = 'text with ![](img.png)\n\n![This is a caption](fig.png)\n\nanother paragraph';
-    var expected = '<p>text with <img src="img.png" alt=""></p>\n<figure><img src="fig.png" alt="This is a caption"><figcaption>This is a caption</figcaption></figure>\n<p>another paragraph</p>\n';
+    var src = '![This is a caption](fig.png)';
+    var expected = '<figure><img src="fig.png" alt="This is a caption"><figcaption>This is a caption</figcaption></figure>\n';
     var res = md.render(src);
     assert.equal(res, expected);
   });
