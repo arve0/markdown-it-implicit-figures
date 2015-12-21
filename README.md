@@ -19,21 +19,6 @@ Output:
 ```
 
 
-## Options
-
-- `dataType`: Set `dataType` to `true` to declare the data-type being wrapped,
-  e.g.: `<figure data-type="image">`. This can be useful for applying special
-  styling for different kind of figures.
-- `figcaption`: Set `figcaption` to `true` to put the alternative text in a
-  `<figcaption>`-block after the image. E.g.: `![text](img.png)` renders to
-
-  ```html
-  <figure>
-    <img src="img.png" alt="text">
-    <figcaption>text</figcaption>
-  </figure>
-  ```
-
 ## Install
 
 ```
@@ -57,6 +42,24 @@ var res = md.render(src);
 
 console.log(res);
 ```
+
+[demo as jsfiddle](https://jsfiddle.net/arve0/1kk1h6p3/4/)
+
+### Options
+
+- `dataType`: Set `dataType` to `true` to declare the data-type being wrapped,
+  e.g.: `<figure data-type="image">`. This can be useful for applying special
+  styling for different kind of figures.
+- `figcaption`: Set `figcaption` to `true` to put the alternative text in a
+  `<figcaption>`-block after the image. E.g.: `![text](img.png)` renders to
+
+  ```html
+  <figure>
+    <img src="img.png" alt="text">
+    <figcaption>text</figcaption>
+  </figure>
+  ```
+
 
 
 ## License

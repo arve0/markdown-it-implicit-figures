@@ -33,5 +33,6 @@
   "devDependencies": {
     "markdown-it": "^5.0.2",
     "mocha": "*"
-  }
+  },
+  "tonicExampleFilename": "demo.js"
 }
