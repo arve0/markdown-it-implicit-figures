@@ -1,6 +1,6 @@
 'use strict';
 var md = require('markdown-it')();
-var implicitFigures = require('./');
+var implicitFigures = require('markdown-it-implicit-figures');
 
 md.use(implicitFigures, { dataType: true, figcaption: true });
 
