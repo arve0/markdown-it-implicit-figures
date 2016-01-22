@@ -16,7 +16,6 @@ describe('markdown-it-implicit-figures', function() {
     assert.equal(res, expected);
   });
 
-
   it('should add data-type=image to figures when opts.dataType is set', function () {
     md = Md().use(implicitFigures, { dataType: true });
     var src = '![](fig.png)\n';
@@ -29,6 +28,29 @@ describe('markdown-it-implicit-figures', function() {
     md = Md().use(implicitFigures, { figcaption: true });
     var src = '![This is a caption](fig.png)';
     var expected = '<figure><img src="fig.png" alt="This is a caption"><figcaption>This is a caption</figcaption></figure>\n';
+    var res = md.render(src);
+    assert.equal(res, expected);
+  });
+
+  it('should not add <figure> when image is inside a paragraph with text', function () {
+    var src = 'text with ![](img.png)\n\nAnother paragraph';
+    var expected = '<p>text with <img src="img.png" alt=""></p>\n<p>Another paragraph</p>\n';
+    var res = md.render(src);
+    assert.equal(res, expected);
+  });
+
+  it('should not add <figure> when image has forceImage indicator', function () {
+    md = Md().use(implicitFigures);
+    var src = '![||](fig.png)\n';
+    var expected = '<p><img src="fig.png" alt=""></p>\n';
+    var res = md.render(src);
+    assert.equal(res, expected);
+  });
+
+  it('should convert alt text into a figcaption', function () {
+    md = Md().use(implicitFigures, { figcaption: true });
+    var src = '![This is a caption and figcaption](fig.png)';
+    var expected = '<figure><img src="fig.png" alt="This is a caption and figcaption"><figcaption>This is a caption and figcaption</figcaption></figure>\n';
     var res = md.render(src);
     assert.equal(res, expected);
   });

@@ -4,18 +4,24 @@ Render images occurring by itself in a paragraph as `<figure><img ...></figure>`
 
 Example input:
 ```md
-text with ![](img.png)
-
 ![](fig.png)
 
-another paragraph
+![Alt text](fig.png)
+
+paragraph with inline ![](img.png)
+
+![||](fig.png)
 ```
 
 Output:
 ```html
-<p>text with <img src="img.png" alt=""></p>
 <figure><img src="fig.png" alt=""></figure>
-<p>another paragraph</p>
+
+<figure><img src="fig.png" alt="Alt text"><figcaption>Alt text</figcaption></figure>
+
+<p>paragraph with inline <img src="img.png" alt=""></p>
+
+<p><img src="img.png" alt=""></p>
 ```
 
 
@@ -34,7 +40,8 @@ var implicitFigures = require('markdown-it-implicit-figures');
 
 md.use(implicitFigures, {
   dataType: false,  // <figure data-type="image">, default: false
-  figcaption: false  // <figcaption>alternative text</figcaption>, default: false
+  figcaption: false,  // <figcaption>alternative text</figcaption>, default: false
+  forceImg: "|"  // default: "||"
 });
 
 var src = 'text with ![](img.png)\n\n![](fig.png)\n\nanother paragraph';
@@ -59,7 +66,7 @@ console.log(res);
     <figcaption>text</figcaption>
   </figure>
   ```
-
+- `forceImg`: Searches for a string inside the markdown `alt` text field, if found forces image to render inside an `img` tag. Defaults to `"||"`
 
 
 ## License

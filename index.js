@@ -2,6 +2,7 @@
 
 module.exports = function implicitFiguresPlugin(md, options) {
   options = options || {};
+  options.forceImg = "||";
 
   function implicitFigures(state) {
     // do not process first and last token
@@ -22,6 +23,20 @@ module.exports = function implicitFiguresPlugin(md, options) {
       // We have inline token containing an image only.
       // Previous token is paragraph open.
       // Next token is paragraph close.
+      // Now let's scan the image alt text for forceImg indicator.
+      if (token.children[0].content.indexOf(options.forceImg) !== -1) {
+        var captions = token.children[0].content.split(options.forceImg);
+        // Remove blank strings after splitting text at forceImg markers
+        for (var y = 0; y < captions.length; y++) {
+          if (captions[y].length === 0) {
+            captions.splice(y, 1);
+          }
+        }
+        // Then convert leftover strings into sentences.
+        token.children[0].children[0].content = captions.join('. ');
+        continue;
+      }
+
       // Lets replace the paragraph tokens with figure tokens.
       state.tokens[i - 1].type = 'figure_open';
       state.tokens[i - 1].tag = 'figure';
