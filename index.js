@@ -10,10 +10,17 @@ module.exports = function implicitFiguresPlugin(md, options) {
 
       // inline token
       if (token.type !== 'inline') { continue; }
-      // inline token have 1 child
-      if (!token.children || token.children.length !== 1) { continue; }
-      // child is image
-      if (token.children[0].type !== 'image') { continue; }
+      // no children or no more than 1 or 3
+      if (!token.children || (token.children.length !== 1 && token.children.length !== 3)) { continue; }
+      //if we have one child, we want it to be image
+      if (token.children.length === 1 && token.children[0].type !== 'image') { continue; }
+      //if we have three children, we want it to be image enclosed by a link
+      if (token.children.legnth === 3
+          && token.children[0].type !== 'link_open'
+          && token.children[1].type !== 'image'
+          && token.children[2].type !== 'link_close') {
+        continue;
+      }
       // prev token is paragraph open
       if (i !== 0 && state.tokens[i - 1].type !== 'paragraph_open') { continue; }
       // next token is paragraph close
@@ -33,7 +40,9 @@ module.exports = function implicitFiguresPlugin(md, options) {
       }
 
       if (options.figcaption == true) {
-        var image = token.children[0];
+        //for linked images, image is one off
+        var image = (token.children.length === 1) ? token.children[0] : token.children[1];
+
         if (image.children && image.children.length) {
           token.children.push(
             new state.Token('figcaption_open', 'figcaption', 1)
