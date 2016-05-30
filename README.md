@@ -8,14 +8,17 @@ text with ![](img.png)
 
 ![](fig.png)
 
-another paragraph
+works with links too:
+
+[![](fig.png)](page.html)
 ```
 
 Output:
 ```html
 <p>text with <img src="img.png" alt=""></p>
 <figure><img src="fig.png" alt=""></figure>
-<p>another paragraph</p>
+<p>works with links too:</p>
+<figure><a href="page.html"><img src="fig.png" alt=""></a></figure>
 ```
 
 
