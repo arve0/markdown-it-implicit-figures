@@ -16,10 +16,10 @@ describe('markdown-it-implicit-figures', function() {
     assert.equal(res, expected);
   });
 
-  it('should add <figure> when image is by itself in a paragraph or preceeded by a standalone link', function () {
+  it('should add <figure> when image is by itself in a paragraph and preceeded by a standalone link', function () {
     md = Md().use(implicitFigures, { dataType: true, figcaption: true });
-    var src = 'text with ![](img.png)\n\n![](fig.png)\n\nanother paragraph\n\n[![Caption](fig.png)](http://example.com)\n\nyet another paragraph';
-    var expected = '<p>text with <img src="img.png" alt=""></p>\n<figure data-type="image"><img src="fig.png" alt=""></figure>\n<p>another paragraph</p>\n<figure data-type="image"><a href="http://example.com"><img src="fig.png" alt="Caption"></a><figcaption>Caption</figcaption></figure>\n<p>yet another paragraph</p>\n';
+    var src = '[![Caption](fig.png)](http://example.com)';
+    var expected = '<figure data-type="image"><a href="http://example.com"><img src="fig.png" alt="Caption"></a><figcaption>Caption</figcaption></figure>\n';
     var res = md.render(src);
     assert.equal(res, expected);
   });
