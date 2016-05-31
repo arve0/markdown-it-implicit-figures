@@ -1,6 +1,6 @@
 {
   "name": "markdown-it-implicit-figures",
-  "version": "0.3.0",
+  "version": "0.3.1",
   "description": "Render images occurring by itself in a paragraph as `<figure><img ...></figure>`, similar to pandoc's implicit_figures",
   "license": "MIT",
   "repository": "arve0/markdown-it-implicit-figures",
