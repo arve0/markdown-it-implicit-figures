@@ -8,14 +8,13 @@ module.exports = function implicitFiguresPlugin(md, options) {
     for (var i=1, l=state.tokens.length; i < (l - 1); ++i) {
       var token = state.tokens[i];
 
-      // inline token
       if (token.type !== 'inline') { continue; }
-      // no children or no more than 1 or 3
+      // children: image alone, or link_open -> image -> link_close
       if (!token.children || (token.children.length !== 1 && token.children.length !== 3)) { continue; }
-      //if we have one child, we want it to be image
+      // one child, should be img
       if (token.children.length === 1 && token.children[0].type !== 'image') { continue; }
-      //if we have three children, we want it to be image enclosed by a link
-      if (token.children.legnth === 3
+      // three children, should be image enclosed in link
+      if (token.children.length === 3
           && token.children[0].type !== 'link_open'
           && token.children[1].type !== 'image'
           && token.children[2].type !== 'link_close') {

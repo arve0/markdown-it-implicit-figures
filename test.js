@@ -42,7 +42,7 @@ describe('markdown-it-implicit-figures', function() {
 
   it('should not make figures of paragraphs with text and inline code', function () {
     var src = 'Text.\n\nAnd `code`.';
-    var expected = '<p>Text.</p>\n\n<p>And <code>code</code>.</p>\n';
+    var expected = '<p>Text.</p>\n<p>And <code>code</code>.</p>\n';
     var res = md.render(src);
     assert.equal(res, expected);
   });
