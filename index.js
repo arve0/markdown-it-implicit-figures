@@ -14,10 +14,10 @@ module.exports = function implicitFiguresPlugin(md, options) {
       // one child, should be img
       if (token.children.length === 1 && token.children[0].type !== 'image') { continue; }
       // three children, should be image enclosed in link
-      if (token.children.length === 3
-          && token.children[0].type !== 'link_open'
-          && token.children[1].type !== 'image'
-          && token.children[2].type !== 'link_close') {
+      if (token.children.length === 3 &&
+          (token.children[0].type !== 'link_open' ||
+           token.children[1].type !== 'image' ||
+           token.children[2].type !== 'link_close')) {
         continue;
       }
       // prev token is paragraph open
