@@ -47,4 +47,11 @@ describe('markdown-it-implicit-figures', function() {
     assert.equal(res, expected);
   });
 
+  it('should not make figures of paragraphs with links only', function () {
+    var src = '[link](page.html)';
+    var expected = '<p><a href="page.html">link</a></p>\n';
+    var res = md.render(src);
+    assert.equal(res, expected);
+  });
+
 });
