@@ -40,6 +40,25 @@ describe('markdown-it-implicit-figures', function() {
     assert.equal(res, expected);
   });
 
+  it('should add incremental tabindex to figures when opts.tabindex is set', function () {
+    md = Md().use(implicitFigures, { tabindex: true });
+    var src = '![](fig.png)\n\n![](fig2.png)';
+    var expected = '<figure tabindex="1"><img src="fig.png" alt=""></figure>\n<figure tabindex="2"><img src="fig2.png" alt=""></figure>\n';
+    var res = md.render(src);
+    assert.equal(res, expected);
+  });
+
+  it('should reset tabindex on each md.render()', function () {
+    md = Md().use(implicitFigures, { tabindex: true });
+    var src = '![](fig.png)\n\n![](fig2.png)';
+    var expected = '<figure tabindex="1"><img src="fig.png" alt=""></figure>\n<figure tabindex="2"><img src="fig2.png" alt=""></figure>\n';
+    var res = md.render(src);
+    assert.equal(res, expected);
+    // render again, should produce same if resetting
+    res = md.render(src);
+    assert.equal(res, expected);
+  });
+
   it('should not make figures of paragraphs with text and inline code', function () {
     var src = 'Text.\n\nAnd `code`.';
     var expected = '<p>Text.</p>\n<p>And <code>code</code>.</p>\n';
