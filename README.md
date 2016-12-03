@@ -62,6 +62,9 @@ console.log(res);
     <figcaption>text</figcaption>
   </figure>
   ```
+- `tabindex`: Set `tabindex` to `true` to add a `tabindex` property to each
+  figure, beginning at `tabindex="1"` and incrementing for each figure
+  encountered. Could be used with [this css-trick](https://css-tricks.com/expanding-images-html5/)
 
 
 
