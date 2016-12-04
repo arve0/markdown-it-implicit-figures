@@ -54,4 +54,11 @@ describe('markdown-it-implicit-figures', function() {
     assert.equal(res, expected);
   });
 
+  it('should linkify captions', function () {
+    md = Md({ linkify: true }).use(implicitFigures, { figcaption: true });
+    var src = '![www.google.com](fig.png)';
+    var expected = '<figure><img src="fig.png" alt="www.google.com"><figcaption><a href="http://www.google.com">www.google.com</a></figcaption></figure>\n';
+    var res = md.render(src);
+    assert.equal(res, expected);
+  });
 });

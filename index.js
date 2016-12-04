@@ -57,5 +57,5 @@ module.exports = function implicitFiguresPlugin(md, options) {
     }
   }
 
-  md.core.ruler.push('implicit_figures', implicitFigures);
+  md.core.ruler.after('inline', 'implicit_figures', implicitFigures);
 };
