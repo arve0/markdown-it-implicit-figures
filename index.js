@@ -3,9 +3,10 @@
 module.exports = function implicitFiguresPlugin(md, options) {
   options = options || {};
 
-  var tabIndex = 1;
-
   function implicitFigures(state) {
+    // reset tabIndex on md.render()
+    var tabIndex = 1;
+
     // do not process first and last token
     for (var i=1, l=state.tokens.length; i < (l - 1); ++i) {
       var token = state.tokens[i];
