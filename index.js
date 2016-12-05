@@ -4,6 +4,9 @@ module.exports = function implicitFiguresPlugin(md, options) {
   options = options || {};
 
   function implicitFigures(state) {
+    // reset tabIndex on md.render()
+    var tabIndex = 1;
+
     // do not process first and last token
     for (var i=1, l=state.tokens.length; i < (l - 1); ++i) {
       var token = state.tokens[i];
@@ -53,6 +56,13 @@ module.exports = function implicitFiguresPlugin(md, options) {
             new state.Token('figcaption_close', 'figcaption', -1)
             );
         }
+      }
+
+      if (options.tabindex == true) {
+        // add a tabindex property
+        // you could use this with css-tricks.com/expanding-images-html5
+        state.tokens[i - 1].attrPush(['tabindex', tabIndex]);
+        tabIndex++;
       }
     }
   }
