@@ -33,7 +33,8 @@
   "dependencies": {},
   "devDependencies": {
     "markdown-it": "*",
-    "mocha": "*"
+    "mocha": "*",
+    "markdown-it-attrs": "*"
   },
   "tonicExampleFilename": "demo.js"
 }
