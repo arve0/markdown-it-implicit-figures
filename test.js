@@ -2,6 +2,7 @@
 var assert = require('assert');
 var Md = require('markdown-it');
 var implicitFigures = require('./');
+var attrs = require('markdown-it-attrs');
 
 describe('markdown-it-implicit-figures', function() {
   var md;
@@ -77,6 +78,14 @@ describe('markdown-it-implicit-figures', function() {
     md = Md({ linkify: true }).use(implicitFigures, { figcaption: true });
     var src = '![www.google.com](fig.png)';
     var expected = '<figure><img src="fig.png" alt="www.google.com"><figcaption><a href="http://www.google.com">www.google.com</a></figcaption></figure>\n';
+    var res = md.render(src);
+    assert.equal(res, expected);
+  });
+
+  it('should work with markdown-it-attrs', function () {
+    md = Md().use(attrs).use(implicitFigures);
+    var src = '![](fig.png){.asdf}';
+    var expected = '<figure><img src="fig.png" alt="" class="asdf"></figure>\n';
     var res = md.render(src);
     assert.equal(res, expected);
   });
