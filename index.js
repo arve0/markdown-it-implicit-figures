@@ -38,7 +38,12 @@ module.exports = function implicitFiguresPlugin(md, options) {
       state.tokens[i + 1].tag = 'figure';
 
       if (options.dataType == true) {
-        state.tokens[i - 1].attrPush(['data-type', 'image']);
+        // if inside link, image/video is second child
+        var figure = (token.children.length === 1) ? token.children[0] : token.children[1];
+        // Get data type
+        var src = figure.attrs.find(item => item[0] === 'src')[1];
+        var dataType = src.match(/(mp4|webm|ogg)$/) ? 'video' : 'image';
+        state.tokens[i - 1].attrPush(['data-type', dataType]);
       }
 
       if (options.figcaption == true) {
