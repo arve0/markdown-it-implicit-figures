@@ -89,4 +89,29 @@ describe('markdown-it-implicit-figures', function() {
     var res = md.render(src);
     assert.equal(res, expected);
   });
+
+  it('should put the image inside a link to the image if it is not yet linked', function () {
+    md = Md().use(implicitFigures, { link: true });
+    var src = '![www.google.com](fig.png)';
+    var expected = '<figure><a href="fig.png"><img src="fig.png" alt="www.google.com"></a></figure>\n';
+    var res = md.render(src);
+    assert.equal(res, expected);
+  });
+
+  it('should not mess up figcaption when linking', function () {
+    md = Md().use(implicitFigures, { figcaption: true, link: true });
+    var src = '![www.google.com](fig.png)';
+    var expected = '<figure><a href="fig.png"><img src="fig.png" alt="www.google.com"></a><figcaption>www.google.com</figcaption></figure>\n';
+    var res = md.render(src);
+    assert.equal(res, expected);
+  });
+
+  it('should leave the image inside a link (and not create an extra one) if it is already linked', function () {
+    md = Md().use(implicitFigures, { link: true });
+    var src = '[![www.google.com](fig.png)](link.html)';
+    var expected = '<figure><a href="link.html"><img src="fig.png" alt="www.google.com"></a></figure>\n';
+    var res = md.render(src);
+    assert.equal(res, expected);
+  });
+
 });

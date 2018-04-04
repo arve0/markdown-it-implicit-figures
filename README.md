@@ -37,7 +37,9 @@ var implicitFigures = require('markdown-it-implicit-figures');
 
 md.use(implicitFigures, {
   dataType: false,  // <figure data-type="image">, default: false
-  figcaption: false  // <figcaption>alternative text</figcaption>, default: false
+  figcaption: false,  // <figcaption>alternative text</figcaption>, default: false
+  tabindex: false, // <figure tabindex="1+n">..., default: false
+  link: false // <a href="img.png"><img src="img.png"></a>, default: false
 });
 
 var src = 'text with ![](img.png)\n\n![](fig.png)\n\nanother paragraph';
@@ -66,7 +68,7 @@ console.log(res);
   figure, beginning at `tabindex="1"` and incrementing for each figure
   encountered. Could be used with [this css-trick](https://css-tricks.com/expanding-images-html5/),
   which expands figures upon mouse-over.
-
+- `link`: Put a link around the image if there is none yet.
 
 
 ## License

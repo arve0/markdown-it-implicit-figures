@@ -40,10 +40,22 @@ module.exports = function implicitFiguresPlugin(md, options) {
       if (options.dataType == true) {
         state.tokens[i - 1].attrPush(['data-type', 'image']);
       }
+      var image;
+
+      if (options.link == true && token.children.length === 1) {
+        image = token.children[0];
+        token.children.unshift(
+          new state.Token('link_open', 'a', 1)
+        );
+        token.children[0].attrPush(['href', image.attrGet('src')]);
+        token.children.push(
+          new state.Token('link_close', 'a', -1)
+        );
+      }
 
       if (options.figcaption == true) {
         //for linked images, image is one off
-        var image = (token.children.length === 1) ? token.children[0] : token.children[1];
+        image = image || ((token.children.length === 1) ? token.children[0] : token.children[1]);
 
         if (image.children && image.children.length) {
           token.children.push(
