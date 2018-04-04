@@ -108,8 +108,8 @@ describe('markdown-it-implicit-figures', function() {
 
   it('should leave the image inside a link (and not create an extra one) if it is already linked', function () {
     md = Md().use(implicitFigures, { link: true });
-    var src = '[![www.google.com](fig.png)](fig.png)';
-    var expected = '<figure><a href="fig.png"><img src="fig.png" alt="www.google.com"></a></figure>\n';
+    var src = '[![www.google.com](fig.png)](link.html)';
+    var expected = '<figure><a href="link.html"><img src="fig.png" alt="www.google.com"></a></figure>\n';
     var res = md.render(src);
     assert.equal(res, expected);
   });
