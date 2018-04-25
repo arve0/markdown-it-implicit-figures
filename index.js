@@ -54,8 +54,8 @@ module.exports = function implicitFiguresPlugin(md, options) {
       }
 
       if (options.figcaption == true) {
-        //for linked images, image is one off
-        image = image || ((token.children.length === 1) ? token.children[0] : token.children[1]);
+        // for linked images, image is one off
+        image = token.children.length === 1 ? token.children[0] : token.children[1];
 
         if (image.children && image.children.length) {
           token.children.push(

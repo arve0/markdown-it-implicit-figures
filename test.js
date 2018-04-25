@@ -41,6 +41,14 @@ describe('markdown-it-implicit-figures', function() {
     assert.equal(res, expected);
   });
 
+  it('should convert alt text for each image into a figcaption when opts.figcaption is set', function () {
+    md = Md().use(implicitFigures, { figcaption: true });
+    var src = '![caption 1](fig.png)\n\n![caption 2](fig2.png)';
+    var expected = '<figure><img src="fig.png" alt="caption 1"><figcaption>caption 1</figcaption></figure>\n<figure><img src="fig2.png" alt="caption 2"><figcaption>caption 2</figcaption></figure>\n'
+    var res = md.render(src);
+    assert.equal(res, expected);
+  });
+
   it('should add incremental tabindex to figures when opts.tabindex is set', function () {
     md = Md().use(implicitFigures, { tabindex: true });
     var src = '![](fig.png)\n\n![](fig2.png)';
