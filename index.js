@@ -32,8 +32,9 @@ module.exports = function implicitFiguresPlugin(md, options) {
       // Previous token is paragraph open.
       // Next token is paragraph close.
       // Lets replace the paragraph tokens with figure tokens.
-      state.tokens[i - 1].type = 'figure_open';
-      state.tokens[i - 1].tag = 'figure';
+      var figure = state.tokens[i - 1];
+      figure.type = 'figure_open';
+      figure.tag = 'figure';
       state.tokens[i + 1].type = 'figure_close';
       state.tokens[i + 1].tag = 'figure';
 
@@ -53,10 +54,10 @@ module.exports = function implicitFiguresPlugin(md, options) {
         );
       }
 
-      if (options.figcaption == true) {
-        // for linked images, image is one off
-        image = token.children.length === 1 ? token.children[0] : token.children[1];
+      // for linked images, image is one off
+      image = token.children.length === 1 ? token.children[0] : token.children[1];
 
+      if (options.figcaption == true) {
         if (image.children && image.children.length) {
           token.children.push(
             new state.Token('figcaption_open', 'figcaption', 1)
@@ -66,6 +67,11 @@ module.exports = function implicitFiguresPlugin(md, options) {
             new state.Token('figcaption_close', 'figcaption', -1)
             );
         }
+      }
+
+      if (options.copyAttrs && image.attrs) {
+        const f = options.copyAttrs === true ? '' : options.copyAttrs
+        figure.attrs = image.attrs.filter(([k,v]) => k.match(f))
       }
 
       if (options.tabindex == true) {

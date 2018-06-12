@@ -126,6 +126,12 @@ describe('markdown-it-implicit-figures', function() {
     md = Md().use(implicitFigures, { figcaption: true });
     var src = '![Image from [source](to)](fig.png)';
     var expected = '<figure><img src="fig.png" alt="Image from source"><figcaption>Image from <a href="to">source</a></figcaption></figure>\n';
+  });
+
+  it('should copy attributes from img to figure tag', function () {
+    md = Md().use(attrs).use(implicitFigures, { copyAttrs: '^class$' });
+    var src = '![caption](fig.png){.cls attr=val}';
+    var expected = '<figure class="cls"><img src="fig.png" alt="caption" class="cls" attr="val"></figure>\n';
     var res = md.render(src);
     assert.equal(res, expected);
   });
