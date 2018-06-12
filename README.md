@@ -69,6 +69,7 @@ console.log(res);
   encountered. Could be used with [this css-trick](https://css-tricks.com/expanding-images-html5/),
   which expands figures upon mouse-over.
 - `link`: Put a link around the image if there is none yet.
+- `copyAttrs`: Copy attributes matching (RegExp or string) `copyAttrs` to `figure` element.
 
 
 ## License
