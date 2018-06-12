@@ -122,4 +122,12 @@ describe('markdown-it-implicit-figures', function() {
     assert.equal(res, expected);
   });
 
+  it('should keep structured markup inside caption (event if not supported in "alt" attribute)', function () {
+    md = Md().use(implicitFigures, { figcaption: true });
+    var src = '![Image from [source](to)](fig.png)';
+    var expected = '<figure><img src="fig.png" alt="Image from source"><figcaption>Image from <a href="to">source</a></figcaption></figure>\n';
+    var res = md.render(src);
+    assert.equal(res, expected);
+  });
+
 });
