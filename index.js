@@ -61,9 +61,7 @@ module.exports = function implicitFiguresPlugin(md, options) {
           token.children.push(
             new state.Token('figcaption_open', 'figcaption', 1)
             );
-          token.children.push(
-            md.utils.assign({}, image.children[0])
-            );
+          token.children.splice(token.children.length, 0, ...image.children);
           token.children.push(
             new state.Token('figcaption_close', 'figcaption', -1)
             );
