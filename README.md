@@ -60,7 +60,7 @@ console.log(res);
 
   ```html
   <figure>
-    <img src="img.png" alt="text">
+    <img src="img.png" alt="">
     <figcaption>text</figcaption>
   </figure>
   ```
