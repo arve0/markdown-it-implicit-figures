@@ -38,12 +38,12 @@ module.exports = function implicitFiguresPlugin(md, options) {
       state.tokens[i + 1].type = 'figure_close';
       state.tokens[i + 1].tag = 'figure';
 
-      if (options.dataType == true) {
+      if (options.dataType) {
         state.tokens[i - 1].attrPush(['data-type', 'image']);
       }
       var image;
 
-      if (options.link == true && token.children.length === 1) {
+      if (options.link && token.children.length === 1) {
         image = token.children[0];
         token.children.unshift(
           new state.Token('link_open', 'a', 1)
@@ -57,25 +57,36 @@ module.exports = function implicitFiguresPlugin(md, options) {
       // for linked images, image is one off
       image = token.children.length === 1 ? token.children[0] : token.children[1];
 
-      if (options.figcaption == true) {
-        if (image.children && image.children.length) {
+      if (options.figcaption) {
+        let figCaption;
+        const captionObj = image.attrs.find(([k]) => k === 'title');
+
+        if (Array.isArray(captionObj)) {
+          figCaption = captionObj[1];
+        }
+
+        if (figCaption) {
+          const [captionContent] = md.parseInline(figCaption);
           token.children.push(
             new state.Token('figcaption_open', 'figcaption', 1)
-            );
-          token.children.splice(token.children.length, 0, ...image.children);
+          );
+          token.children.push(...captionContent.children);
           token.children.push(
             new state.Token('figcaption_close', 'figcaption', -1)
-            );
-          image.children.length = 0;
+          );
+
+          if (image.attrs) {
+            image.attrs = image.attrs.filter(([k]) => k !== 'title');
+          }
         }
       }
 
       if (options.copyAttrs && image.attrs) {
-        const f = options.copyAttrs === true ? '' : options.copyAttrs
-        figure.attrs = image.attrs.filter(([k,v]) => k.match(f))
+        const f = options.copyAttrs === true ? '' : options.copyAttrs;
+        figure.attrs = image.attrs.filter(([k,v]) => k.match(f));
       }
 
-      if (options.tabindex == true) {
+      if (options.tabindex) {
         // add a tabindex property
         // you could use this with css-tricks.com/expanding-images-html5
         state.tokens[i - 1].attrPush(['tabindex', tabIndex]);
