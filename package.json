@@ -34,7 +34,7 @@
   "devDependencies": {
     "markdown-it": "*",
     "markdown-it-attrs": "*",
-    "mocha": "^7.1.1"
+    "mocha": "^10.2.0"
   },
   "tonicExampleFilename": "demo.js"
 }
