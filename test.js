@@ -68,6 +68,14 @@ describe('markdown-it-implicit-figures', function() {
     assert.equal(res, expected);
   });
 
+  it('should add loading lazy attribute to image when opts.lazyLoading is set', function () {
+    md = Md().use(implicitFigures, { lazyLoading: true });
+    var src = '![](fig.png)';
+    var expected = '<figure><img src="fig.png" alt="" loading="lazy"></figure>\n';
+    var res = md.render(src);
+    assert.equal(res, expected);
+  });
+
   it('should not make figures of paragraphs with text and inline code', function () {
     var src = 'Text.\n\nAnd `code`.';
     var expected = '<p>Text.</p>\n<p>And <code>code</code>.</p>\n';
