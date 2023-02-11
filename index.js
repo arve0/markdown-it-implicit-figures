@@ -81,6 +81,10 @@ module.exports = function implicitFiguresPlugin(md, options) {
         state.tokens[i - 1].attrPush(['tabindex', tabIndex]);
         tabIndex++;
       }
+
+      if (options.lazyLoading == true) {
+        image.attrPush(['loading', 'lazy']);
+      }
     }
   }
   md.core.ruler.before('linkify', 'implicit_figures', implicitFigures);

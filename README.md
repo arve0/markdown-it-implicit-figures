@@ -39,6 +39,7 @@ md.use(implicitFigures, {
   dataType: false,  // <figure data-type="image">, default: false
   figcaption: false,  // <figcaption>alternative text</figcaption>, default: false
   tabindex: false, // <figure tabindex="1+n">..., default: false
+  lazyLoading: false, // <img loading="lazy" ...>, default: false
   link: false // <a href="img.png"><img src="img.png"></a>, default: false
 });
 
@@ -68,6 +69,7 @@ console.log(res);
   figure, beginning at `tabindex="1"` and incrementing for each figure
   encountered. Could be used with [this css-trick](https://css-tricks.com/expanding-images-html5/),
   which expands figures upon mouse-over.
+- `lazyLoading`: Set `lazyLoading` to `true` to add `loading="lazy"` to image element.
 - `link`: Put a link around the image if there is none yet.
 - `copyAttrs`: Copy attributes matching (RegExp or string) `copyAttrs` to `figure` element.
 
