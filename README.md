@@ -38,9 +38,10 @@ var implicitFigures = require('markdown-it-implicit-figures');
 md.use(implicitFigures, {
   dataType: false,  // <figure data-type="image">, default: false
   figcaption: false,  // <figcaption>alternative text</figcaption>, default: false
-  tabindex: false, // <figure tabindex="1+n">..., default: false
+  keepAlt: false // <img alt="alt text" .../><figcaption>alt text</figcaption>, default: false
   lazyLoading: false, // <img loading="lazy" ...>, default: false
   link: false // <a href="img.png"><img src="img.png"></a>, default: false
+  tabindex: false, // <figure tabindex="1+n">..., default: false
 });
 
 var src = 'text with ![](img.png)\n\n![](fig.png)\n\nanother paragraph';
@@ -56,12 +57,29 @@ console.log(res);
 - `dataType`: Set `dataType` to `true` to declare the data-type being wrapped,
   e.g.: `<figure data-type="image">`. This can be useful for applying special
   styling for different kind of figures.
-- `figcaption`: Set `figcaption` to `true` to put the alternative text in a
-  `<figcaption>`-block after the image. E.g.: `![text](img.png)` renders to
+- `figcaption`: Set `figcaption` to `true` or `alt` to put the alternative text
+  in a `<figcaption>`-block after the image. E.g.: `![text](img.png)` renders to
 
   ```html
   <figure>
     <img src="img.png" alt="">
+    <figcaption>text</figcaption>
+  </figure>
+  ```
+  - Set `figcaption` to `title` to put the title text in a `<figcaption>`-block
+    after the image. E.g.: `![text](img.png "title")` renders to
+    ```html
+    <figure>
+      <img src="img.png" alt="text">
+      <figcaption>title</figcaption>
+    </figure>
+    ```
+- `keepAlt`: Set `keepAlt` to `true` to prevent it from being cleared when turned
+  into a `figcaption`, E.g.: `![text](img.png)` renders to
+
+  ```html
+  <figure>
+    <img src="img.png" alt="text">
     <figcaption>text</figcaption>
   </figure>
   ```

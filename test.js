@@ -17,9 +17,9 @@ describe('markdown-it-implicit-figures', function() {
     assert.equal(res, expected);
   });
 
-  it('should add <figure> when image is by itself in a paragraph and preceeded by a standalone link', function () {
-    md = Md().use(implicitFigures, { dataType: true, figcaption: true });
-    var src = '[![Caption](fig.png)](http://example.com)';
+  it('should add <figure> when image is by itself in a paragraph and preceded by a standalone link', function () {
+    md = Md().use(implicitFigures, { dataType: true, figcaption: 'title' });
+    var src = '[![](fig.png "Caption")](http://example.com)';
     var expected = '<figure data-type="image"><a href="http://example.com"><img src="fig.png" alt=""></a><figcaption>Caption</figcaption></figure>\n';
     var res = md.render(src);
     assert.equal(res, expected);
@@ -33,18 +33,50 @@ describe('markdown-it-implicit-figures', function() {
     assert.equal(res, expected);
   });
 
-  it('should add convert alt text into a figcaption when opts.figcaption is set', function () {
+  it('should convert title text into a figcaption when opts.figcaption is set to "title"', function () {
+    md = Md().use(implicitFigures, { figcaption: 'title' });
+    var src = '![This is an alt](fig.png "This is a caption")';
+    var expected = '<figure><img src="fig.png" alt="This is an alt"><figcaption>This is a caption</figcaption></figure>\n';
+    var res = md.render(src);
+    assert.equal(res, expected);
+  });
+
+  it('should convert alt text into a figcaption when opts.figcaption is set', function () {
     md = Md().use(implicitFigures, { figcaption: true });
-    var src = '![This is a caption](fig.png)';
-    var expected = '<figure><img src="fig.png" alt=""><figcaption>This is a caption</figcaption></figure>\n';
+    var src = '![This is an alt](fig.png "This is a caption")';
+    var expected = '<figure><img src="fig.png" alt="" title="This is a caption"><figcaption>This is an alt</figcaption></figure>\n';
+    var res = md.render(src);
+    assert.equal(res, expected);
+  });
+
+  it('should convert alt text into a figcaption when opts.figcaption is set and keep it when keepAlt is set', function () {
+    md = Md().use(implicitFigures, { figcaption: true, keepAlt: true });
+    var src = '![This is an alt](fig.png "This is a caption")';
+    var expected = '<figure><img src="fig.png" alt="This is an alt" title="This is a caption"><figcaption>This is an alt</figcaption></figure>\n';
+    var res = md.render(src);
+    assert.equal(res, expected);
+  });
+
+  it('should convert title text for each image into a figcaption when opts.figcaption is set to "title"', function () {
+    md = Md().use(implicitFigures, { figcaption: 'title' });
+    var src = '![alt 1](fig.png "caption 1")\n\n![alt 2](fig2.png "caption 2")';
+    var expected = '<figure><img src="fig.png" alt="alt 1"><figcaption>caption 1</figcaption></figure>\n<figure><img src="fig2.png" alt="alt 2"><figcaption>caption 2</figcaption></figure>\n'
     var res = md.render(src);
     assert.equal(res, expected);
   });
 
   it('should convert alt text for each image into a figcaption when opts.figcaption is set', function () {
     md = Md().use(implicitFigures, { figcaption: true });
-    var src = '![caption 1](fig.png)\n\n![caption 2](fig2.png)';
-    var expected = '<figure><img src="fig.png" alt=""><figcaption>caption 1</figcaption></figure>\n<figure><img src="fig2.png" alt=""><figcaption>caption 2</figcaption></figure>\n'
+    var src = '![alt 1](fig.png "caption 1")\n\n![alt 2](fig2.png "caption 2")';
+    var expected = '<figure><img src="fig.png" alt="" title="caption 1"><figcaption>alt 1</figcaption></figure>\n<figure><img src="fig2.png" alt="" title="caption 2"><figcaption>alt 2</figcaption></figure>\n'
+    var res = md.render(src);
+    assert.equal(res, expected);
+  });
+
+  it('should convert alt text for each image into a figcaption when opts.figcaption is set and keepAlt is set', function () {
+    md = Md().use(implicitFigures, { figcaption: true, keepAlt: true });
+    var src = '![alt 1](fig.png "caption 1")\n\n![alt 2](fig2.png "caption 2")';
+    var expected = '<figure><img src="fig.png" alt="alt 1" title="caption 1"><figcaption>alt 1</figcaption></figure>\n<figure><img src="fig2.png" alt="alt 2" title="caption 2"><figcaption>alt 2</figcaption></figure>\n'
     var res = md.render(src);
     assert.equal(res, expected);
   });
@@ -90,10 +122,27 @@ describe('markdown-it-implicit-figures', function() {
     assert.equal(res, expected);
   });
 
-  it('should linkify captions', function () {
+  it('should linkify captions when figcaption is set to "title"', function () {
+    md = Md({ linkify: true }).use(implicitFigures, { figcaption: 'title' });
+    var src = '![](fig.png "www.google.com")';
+    var expected = '<figure><img src="fig.png" alt=""><figcaption><a href="http://www.google.com">www.google.com</a></figcaption></figure>\n';
+    var res = md.render(src);
+    assert.equal(res, expected);
+  });
+
+
+  it('should linkify captions when figcaption is on', function () {
     md = Md({ linkify: true }).use(implicitFigures, { figcaption: true });
     var src = '![www.google.com](fig.png)';
     var expected = '<figure><img src="fig.png" alt=""><figcaption><a href="http://www.google.com">www.google.com</a></figcaption></figure>\n';
+    var res = md.render(src);
+    assert.equal(res, expected);
+  });
+
+  it('should linkify captions when figcaption is on and keepAlt is set', function () {
+    md = Md({ linkify: true }).use(implicitFigures, { figcaption: true, keepAlt: true });
+    var src = '![www.google.com](fig.png)';
+    var expected = '<figure><img src="fig.png" alt="www.google.com"><figcaption><a href="http://www.google.com">www.google.com</a></figcaption></figure>\n';
     var res = md.render(src);
     assert.equal(res, expected);
   });
@@ -114,10 +163,27 @@ describe('markdown-it-implicit-figures', function() {
     assert.equal(res, expected);
   });
 
+  it('should not mess up figcaption when linking and figcaption is set to "title"', function () {
+    md = Md().use(implicitFigures, { figcaption: 'title', link: true });
+    var src = '![](fig.png "www.google.com")';
+    var expected = '<figure><a href="fig.png"><img src="fig.png" alt=""></a><figcaption>www.google.com</figcaption></figure>\n';
+    var res = md.render(src);
+    assert.equal(res, expected);
+  });
+
   it('should not mess up figcaption when linking', function () {
-    md = Md().use(implicitFigures, { figcaption: true, link: true });
+    md = Md().use(implicitFigures, { figcaption: 'alt', link: true });
     var src = '![www.google.com](fig.png)';
     var expected = '<figure><a href="fig.png"><img src="fig.png" alt=""></a><figcaption>www.google.com</figcaption></figure>\n';
+    var res = md.render(src);
+    assert.equal(res, expected);
+  });
+
+
+  it('should not mess up figcaption when linking and keepAlt is set', function () {
+    md = Md().use(implicitFigures, { figcaption: 'alt', link: true, keepAlt: true });
+    var src = '![www.google.com](fig.png)';
+    var expected = '<figure><a href="fig.png"><img src="fig.png" alt="www.google.com"></a><figcaption>www.google.com</figcaption></figure>\n';
     var res = md.render(src);
     assert.equal(res, expected);
   });
@@ -130,9 +196,9 @@ describe('markdown-it-implicit-figures', function() {
     assert.equal(res, expected);
   });
 
-  it('should keep structured markup inside caption (event if not supported in "alt" attribute)', function () {
-    md = Md().use(implicitFigures, { figcaption: true });
-    var src = '![Image from [source](to)](fig.png)';
+  it('should keep structured markup inside caption (even if not supported in "alt" attribute)', function () {
+    md = Md().use(implicitFigures, { figcaption: 'title' });
+    var src = '![](fig.png "Image from [source](to)")';
     var expected = '<figure><img src="fig.png" alt=""><figcaption>Image from <a href="to">source</a></figcaption></figure>\n';
     var res = md.render(src);
     assert.equal(res, expected);
