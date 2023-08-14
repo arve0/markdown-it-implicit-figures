@@ -58,7 +58,7 @@ module.exports = function implicitFiguresPlugin(md, options) {
       image = token.children.length === 1 ? token.children[0] : token.children[1];
 
       if (options.figcaption == true) {
-        if (image.children && image.children.length) {
+        if (image.children) {
           token.children.push(
             new state.Token('figcaption_open', 'figcaption', 1)
             );

@@ -146,4 +146,12 @@ describe('markdown-it-implicit-figures', function() {
     assert.equal(res, expected);
   });
 
+  it('should generate figcaption even the alt is empty', function () {
+    md = Md().use(implicitFigures, { figcaption: true });
+    var src = '![](xyz.png)';
+    var expected = '<figure><img src="xyz.png" alt=""><figcaption></figcaption></figure>\n';
+    var res = md.render(src);
+    assert.equal(res, expected);
+  });
+
 });
