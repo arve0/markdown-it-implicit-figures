@@ -35,13 +35,14 @@ module.exports = function implicitFiguresPlugin(md, options) {
       var figure = state.tokens[i - 1];
       figure.type = 'figure_open';
       figure.tag = 'figure';
+
       state.tokens[i + 1].type = 'figure_close';
       state.tokens[i + 1].tag = 'figure';
 
       if (options.dataType == true) {
         state.tokens[i - 1].attrPush(['data-type', 'image']);
       }
-      var image;
+      var image = token.children[0];
 
       if (options.link == true && token.children.length === 1) {
         image = token.children[0];
@@ -53,6 +54,10 @@ module.exports = function implicitFiguresPlugin(md, options) {
           new state.Token('link_close', 'a', -1)
         );
       }
+
+        if(options.id === true) {
+            figure.attrPush(['id', image.attrGet('alt') || 'fig-' + tabIndex]);
+        }
 
       // for linked images, image is one off
       image = token.children.length === 1 ? token.children[0] : token.children[1];

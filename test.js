@@ -154,4 +154,20 @@ describe('markdown-it-implicit-figures', function() {
     assert.equal(res, expected);
   });
 
+  it('should generate id from alt for figure tag', function () {
+    md = Md().use(implicitFigures, { id: true, figcaption: true });
+    var src = '![fig-1](xyz.png)';
+    var expected = '<figure id="fig-1"><img src="xyz.png" alt=""><figcaption>fig-1</figcaption></figure>\n';
+    var res = md.render(src);
+    assert.equal(res, expected);
+  });
+
+  it('should generate id from tabIndex for figure tag', function () {
+    md = Md().use(implicitFigures, { id: true, figcaption: true, tabIndex: true });
+    var src = '![](xyz.png)';
+    var expected = '<figure id="fig-1"><img src="xyz.png" alt=""><figcaption></figcaption></figure>\n';
+    var res = md.render(src);
+    assert.equal(res, expected);
+  });
+
 });
