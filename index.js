@@ -59,24 +59,24 @@ module.exports = function implicitFiguresPlugin(md, options) {
 
       if (options.figcaption) {
         // store string value of option for later comparison
-        const captionOptionString = new String(options.figcaption).toLowerCase().trim();
+        var captionOptionString = new String(options.figcaption).toLowerCase().trim();
 
         if (captionOptionString == 'title') {
           var figCaption;
           var captionObj = image.attrs.find(function ([k]) {
             return k === 'title';
           });
-  
+
           if (Array.isArray(captionObj)) {
             figCaption = captionObj[1];
           }
-  
+
           if (figCaption) {
             var captionArray = md.parseInline(figCaption);
 
             // use empty default
             var captionContent = { children: []};
-            
+
             // override if the data is there
             if (Array.isArray(captionArray) && captionArray.length) {
               captionContent = captionArray[0];
@@ -90,7 +90,7 @@ module.exports = function implicitFiguresPlugin(md, options) {
             token.children.push(
               new state.Token('figcaption_close', 'figcaption', -1)
             );
-  
+
             if (image.attrs) {
               image.attrs = image.attrs.filter(function ([k]) {
                 return k !== 'title';
