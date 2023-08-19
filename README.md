@@ -32,8 +32,8 @@ $ npm install --save markdown-it-implicit-figures
 ## Usage
 
 ```js
-var md = require('markdown-it')();
-var implicitFigures = require('markdown-it-implicit-figures');
+const md = require('markdown-it')();
+const implicitFigures = require('markdown-it-implicit-figures');
 
 md.use(implicitFigures, {
   dataType: false,  // <figure data-type="image">, default: false
@@ -44,8 +44,8 @@ md.use(implicitFigures, {
   tabindex: false, // <figure tabindex="1+n">..., default: false
 });
 
-var src = 'text with ![](img.png)\n\n![](fig.png)\n\nanother paragraph';
-var res = md.render(src);
+const src = 'text with ![](img.png)\n\n![](fig.png)\n\nanother paragraph';
+const res = md.render(src);
 
 console.log(res);
 ```
