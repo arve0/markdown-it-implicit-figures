@@ -1,5 +1,5 @@
 name: Test
-run-name: ${{ github.actor }} is running tests
+run-name: Running tests
 on: [push]
 jobs:
   test:
@@ -7,4 +7,5 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       - uses: actions/setup-node@v3
+      - run: npm install
       - run: npm test

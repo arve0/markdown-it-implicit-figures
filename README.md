@@ -1,4 +1,4 @@
-# markdown-it-implicit-figures [![Build Status](https://travis-ci.org/arve0/markdown-it-implicit-figures.svg?branch=master)](https://travis-ci.org/arve0/markdown-it-implicit-figures) [![npm version](https://badge.fury.io/js/markdown-it-implicit-figures.svg)](http://badge.fury.io/js/markdown-it-implicit-figures)
+# markdown-it-implicit-figures [![Build Status](https://github.com/arve0/markdown-it-implicit-figures/actions/workflows/test.yml/badge.svg)](https://github.com/arve0/markdown-it-implicit-figures/actions/workflows/test.yml) [![npm version](https://badge.fury.io/js/markdown-it-implicit-figures.svg)](http://badge.fury.io/js/markdown-it-implicit-figures)
 
 Render images occurring by itself in a paragraph as `<figure><img ...></figure>`, similar to [pandoc's implicit figures](http://pandoc.org/README.html#images).
 
