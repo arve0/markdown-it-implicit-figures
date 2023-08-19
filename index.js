@@ -57,22 +57,70 @@ module.exports = function implicitFiguresPlugin(md, options) {
       // for linked images, image is one off
       image = token.children.length === 1 ? token.children[0] : token.children[1];
 
-      if (options.figcaption == true) {
-        if (image.children && image.children.length) {
-          token.children.push(
-            new state.Token('figcaption_open', 'figcaption', 1)
+      if (options.figcaption) {
+        // store string value of option for later comparison
+        const captionOptionString = new String(options.figcaption).toLowerCase().trim();
+
+        if (captionOptionString == 'title') {
+          var figCaption;
+          var captionObj = image.attrs.find(function ([k]) {
+            return k === 'title';
+          });
+  
+          if (Array.isArray(captionObj)) {
+            figCaption = captionObj[1];
+          }
+  
+          if (figCaption) {
+            var captionArray = md.parseInline(figCaption);
+
+            // use empty default
+            var captionContent = { children: []};
+            
+            // override if the data is there
+            if (Array.isArray(captionArray) && captionArray.length) {
+              captionContent = captionArray[0];
+            }
+
+            // add figcaption
+            token.children.push(
+              new state.Token('figcaption_open', 'figcaption', 1)
             );
-          token.children.splice(token.children.length, 0, ...image.children);
-          token.children.push(
-            new state.Token('figcaption_close', 'figcaption', -1)
+            token.children.push(...captionContent.children);
+            token.children.push(
+              new state.Token('figcaption_close', 'figcaption', -1)
             );
-          image.children.length = 0;
+  
+            if (image.attrs) {
+              image.attrs = image.attrs.filter(function ([k]) {
+                return k !== 'title';
+              });
+            }
+          }
         }
+
+        else if (options.figcaption == true || captionOptionString == 'alt') {
+          if (image.children && image.children.length) {
+            token.children.push(
+              new state.Token('figcaption_open', 'figcaption', 1)
+              );
+            token.children.splice(token.children.length, 0, ...image.children);
+            token.children.push(
+              new state.Token('figcaption_close', 'figcaption', -1)
+              );
+            if (!options.keepAlt) image.children.length = 0;
+          }
+        }
+
+
+
       }
 
       if (options.copyAttrs && image.attrs) {
-        const f = options.copyAttrs === true ? '' : options.copyAttrs
-        figure.attrs = image.attrs.filter(([k,v]) => k.match(f))
+        var f = options.copyAttrs === true ? '' : options.copyAttrs;
+        figure.attrs = image.attrs.filter(function ([k]) {
+          return k.match(f);
+        });
       }
 
       if (options.tabindex == true) {
