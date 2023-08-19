@@ -50,7 +50,7 @@ const res = md.render(src);
 console.log(res);
 ```
 
-[demo as jsfiddle](https://jsfiddle.net/arve0/1kk1h6p3/4/)
+[demo in RunKit](https://runkit.com/embed/k48mqe5q6p56)
 
 ### Options
 
